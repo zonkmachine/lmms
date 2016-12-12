@@ -494,8 +494,7 @@ void malletsInstrumentView::changePreset()
 {
 	malletsInstrument * inst = castModel<malletsInstrument>();
 	int _preset = inst->m_presetsModel.value();
-	
-	printf("malletsInstrumentView %d\n", _preset);
+
 	if( _preset < 9 )
 	{
 		m_tubeBellWidget->hide();
