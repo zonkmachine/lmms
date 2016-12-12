@@ -461,6 +461,7 @@ int main( int argc, char * * argv )
 			if( file_to_load == recoveryFile )
 			{
 				engine::getSong()->createNewProjectFromTemplate( file_to_load );
+				engine::getSong()->setModified();
 			}
 			else
 			{
