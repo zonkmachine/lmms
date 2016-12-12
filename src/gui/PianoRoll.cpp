@@ -959,13 +959,7 @@ inline void PianoRoll::drawNoteRect( QPainter & _p, int _x, int _y,
 
 	QColor col = QColor( noteCol );
 
-	if( _n->length() < 0 )
-	{
-		//step note
-		col.setRgb( 0, 255, 0 );
-		_p.fillRect( _x, _y, _width, KEY_LINE_HEIGHT - 2, col );
-	}
-	else if( _n->selected() )
+	if( _n->selected() )
 	{
 		col.setRgb( 0x00, 0x40, 0xC0 );
 		_p.fillRect( _x, _y, _width, KEY_LINE_HEIGHT - 2, col );
@@ -3882,43 +3876,41 @@ void PianoRoll::selectAll()
 
 	for( NoteVector::ConstIterator it = notes.begin(); it != notes.end(); ++it )
 	{
-		int len_ticks = ( *it )->length();
+		int len_ticks = static_cast<int>( ( *it )->length() ) > 0 ?
+				static_cast<int>( ( *it )->length() ) : 1;
 
-		if( len_ticks > 0 )
+		const int key = ( *it )->key();
+
+		int pos_ticks = ( *it )->pos();
+		if( key <= m_selectStartKey || first_time )
 		{
-			const int key = ( *it )->key();
-
-			int pos_ticks = ( *it )->pos();
-			if( key <= m_selectStartKey || first_time )
-			{
-				// if we move start-key down, we have to add
-				// the difference between old and new start-key
-				// to m_selectedKeys, otherwise the selection
-				// is just moved down...
-				m_selectedKeys += m_selectStartKey
-								- ( key - 1 );
-				m_selectStartKey = key - 1;
-			}
-			if( key >= m_selectedKeys+m_selectStartKey ||
-								first_time )
-			{
-				m_selectedKeys = key - m_selectStartKey;
-			}
-			if( pos_ticks < m_selectStartTick ||
-								first_time )
-			{
-				m_selectStartTick = pos_ticks;
-			}
-			if( pos_ticks + len_ticks >
-				m_selectStartTick + m_selectedTick ||
-								first_time )
-			{
-				m_selectedTick = pos_ticks +
-							len_ticks -
-							m_selectStartTick;
-			}
-			first_time = false;
+			// if we move start-key down, we have to add
+			// the difference between old and new start-key
+			// to m_selectedKeys, otherwise the selection
+			// is just moved down...
+			m_selectedKeys += m_selectStartKey
+							- ( key - 1 );
+			m_selectStartKey = key - 1;
 		}
+		if( key >= m_selectedKeys + m_selectStartKey ||
+							first_time )
+		{
+			m_selectedKeys = key - m_selectStartKey;
+		}
+		if( pos_ticks < m_selectStartTick ||
+							first_time )
+		{
+			m_selectStartTick = pos_ticks;
+		}
+		if( pos_ticks + len_ticks >
+			m_selectStartTick + m_selectedTick ||
+							first_time )
+		{
+			m_selectedTick = pos_ticks +
+						len_ticks -
+						m_selectStartTick;
+		}
+		first_time = false;
 	}
 }
 
