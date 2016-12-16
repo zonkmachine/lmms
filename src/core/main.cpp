@@ -519,8 +519,14 @@ int main( int argc, char * * argv )
 
 	const int ret = app->exec();
 	delete app;
-	return( ret );
-}
 
+	// ProjectRenderer::updateConsoleProgress() doesn't return line after render
+	if( core_only )
+	{
+		printf( "\n" );
+	}
+
+	return ret;
+}
 
 /* vim: set tw=0 noexpandtab: */
