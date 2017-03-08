@@ -337,6 +337,10 @@ bool MidiImport::readSMF( TrackContainer* tc )
 		}
 	}
 
+	// Update the tempo to avoid crash when playing a project imported
+	// via the command line
+	engine::updateFramesPerTick();
+
 	// Song events
 	for( int e = 0; e < seq->length(); ++e )
 	{
