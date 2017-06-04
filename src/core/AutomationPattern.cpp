@@ -220,8 +220,7 @@ void AutomationPattern::removeValue( const MidiTime & _time,
 	cleanObjects();
 
 	MidiTime newTime = _quant_pos && engine::automationEditor() ?
-		note::quantized( _time,
-			engine::automationEditor()->quantization() ) :
+		note::quantized( _time, 3 ) :
 		_time;
 
 	m_timeMap.remove( newTime );
