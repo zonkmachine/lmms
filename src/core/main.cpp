@@ -450,14 +450,17 @@ int main( int argc, char * * argv )
 			file_to_load = recoveryFile;
 		}
 
+		// [Settel] workaround: showMaximized() doesn't work with
+		// FVWM2 unless the window is already visible -> show() first
+		engine::mainWindow()->show();
+		if( fullscreen )
+		{
+			engine::mainWindow()->showMaximized();
+		}
+
 		// we try to load given file
 		if( !file_to_load.isEmpty() )
 		{
-			engine::mainWindow()->show();
-			if( fullscreen )
-			{
-				engine::mainWindow()->showMaximized();
-			}
 			if( file_to_load == recoveryFile )
 			{
 				engine::getSong()->createNewProjectFromTemplate( file_to_load );
@@ -475,24 +478,11 @@ int main( int argc, char * * argv )
 			{
 				return 0;
 			}
-
-			engine::mainWindow()->show();
-			if( fullscreen )
-			{
-				engine::mainWindow()->showMaximized();
-			}
 		}
 		else
 		{
 			engine::getSong()->createNewProject();
 
-			// [Settel] workaround: showMaximized() doesn't work with
-			// FVWM2 unless the window is already visible -> show() first
-			engine::mainWindow()->show();
-			if( fullscreen )
-			{
-				engine::mainWindow()->showMaximized();
-			}
 		}
 	}
 	else
